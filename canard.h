@@ -498,6 +498,8 @@ typedef struct {
 
 extern volatile canard_errors_t canard_errors;
 
+// Needs to be defined externally
+extern uint64_t getMonotonicTimestampMSec(void);
 
 #ifdef __cplusplus
 }

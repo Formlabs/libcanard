@@ -119,12 +119,9 @@ volatile canard_errors_t canard_errors = {
     .broadcast_errors = 0
 };
 
-
 void processRxQueue() {
-//    const ::Units::Time::Time__ms__u64 ts = ::Helpers::getMonotonicTimestamp();
-//    const uint64_t ts_usec = ts.get() * 1000ULL;
-    // XXX
-    const uint64_t ts_usec = 0;
+    const uint64_t ts_usec = getMonotonicTimestampMSec();
+
     while (!CAN_RX_RB.is_empty()) {
         canardHandleRxFrame(&canard, &CAN_RX_RB.get_next_read_entry(), ts_usec);
         CAN_RX_RB.advance_read();
@@ -153,11 +150,6 @@ void processTxQueue(void) {
 }
 
 void processTxRxOnce() {
-    // XXX
-//    if (reboot) {  // Only reboot after tx is done to allow sending back response
-//        request_reset = true;
-//    }
-
     NVIC_DisableIRQ(CAN_TX_IRQn);
     __ISB();
     if (!canTXTransmitting) {
