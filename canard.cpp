@@ -91,8 +91,8 @@ private:
 
 #define USED __attribute__((used))
 
-static RingBuffer<CanardCANFrame, 64> CAN_RX_RB;
-static RingBuffer<CanardCANFrame, 128> CAN_TX_RB;
+static RingBuffer<CanardCANFrame, CAN_RX_RB_SIZE> CAN_RX_RB;
+static RingBuffer<CanardCANFrame, CAN_TX_RB_SIZE> CAN_TX_RB;
 
 extern "C" {
 extern CanardInstance canard;
