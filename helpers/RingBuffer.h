@@ -1,7 +1,7 @@
 #pragma once
 
 #include <cstdint>
-#include "int_fit_type.h"
+#include <libcanard/helpers/int_fit_type.h>
 
 template<
     typename T,

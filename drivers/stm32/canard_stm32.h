@@ -9,7 +9,7 @@
 #ifndef CANARD_STM32_H
 #define CANARD_STM32_H
 
-#include <canard.h>
+#include <libcanard/canard.h>
 #include <string.h>
 
 #ifdef STM32F303xC

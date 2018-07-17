@@ -1,8 +1,8 @@
-#include <canard.h>
+#include <libcanard/canard.h>
 #include <cstdint>
-#include <drivers/stm32/canard_stm32.h>
-#include <helpers/RingBuffer.h>
-#include <helpers/helpers.h>
+#include <libcanard/drivers/stm32/canard_stm32.h>
+#include <libcanard/helpers/RingBuffer.h>
+#include <libcanard/helpers/helpers.h>
 
 static RingBuffer<CanardCANFrame, CAN_RX_RB_SIZE> CAN_RX_RB;
 static RingBuffer<CanardCANFrame, CAN_TX_RB_SIZE> CAN_TX_RB;

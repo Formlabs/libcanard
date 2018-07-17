@@ -23,7 +23,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "canard.h"
+#include <libcanard/canard.h>
 
 static bool shouldAcceptTransferMock(const CanardInstance*,
                                      uint64_t*,
