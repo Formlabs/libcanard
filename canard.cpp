@@ -18,10 +18,11 @@ int getTXSize() {
 
 extern "C" {
 extern CanardInstance canard;
-extern volatile int allTimeMaxRxSize;
-extern volatile int allTimeMaxTxSize;
-extern volatile int maxRxSize;
-extern volatile int maxTxSize;
+
+volatile int allTimeMaxRxSize;
+volatile int allTimeMaxTxSize;
+volatile int maxRxSize;
+volatile int maxTxSize;
 
 #if defined(STM32F0) || defined(STM32F3)
 void USED CAN_IT_Callback() {
