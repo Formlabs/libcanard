@@ -54,7 +54,7 @@ volatile canard_errors_t canard_errors = {
 };
 
 void processRxQueue() {
-    const uint64_t ts_usec = getMonotonicTimestampMSec();
+    const uint64_t ts_usec = getMonotonicTimestampMSec() * 1000UL;
 
     while (!CAN_RX_RB.is_empty()) {
         canardHandleRxFrame(&canard, &CAN_RX_RB.get_next_read_entry(), ts_usec);
