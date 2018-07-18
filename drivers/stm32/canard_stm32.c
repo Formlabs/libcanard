@@ -477,11 +477,15 @@ void canardSTM32ReleaseFIFO() {
 }
 
 void canardSTM32EnablePeripheral() {
-    NVIC_EnableIRQ(CAN_IRQ);
+    /* XXX ACE: does order matter here? */
+    NVIC_EnableIRQ(CANARD_RX0_IRQn);
+    NVIC_EnableIRQ(CANARD_TX_IRQn);
 }
 
 void canardSTM32DisablePeripheral() {
-    NVIC_DisableIRQ(CAN_IRQ);
+    /* XXX ACE: does order matter here? */
+    NVIC_DisableIRQ(CANARD_TX_IRQn);
+    NVIC_DisableIRQ(CANARD_RX0_IRQn);
 }
 
 

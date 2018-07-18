@@ -93,12 +93,12 @@ void processTxQueue(void) {
 }
 
 void processTxRxOnce() {
-    NVIC_DisableIRQ(CAN_TX_IRQn);
+    NVIC_DisableIRQ(CANARD_TX_IRQn);
     __ISB();
     if (!canTXTransmitting) {
         processTxQueue();
     }
-    NVIC_EnableIRQ(CAN_TX_IRQn);
+    NVIC_EnableIRQ(CANARD_TX_IRQn);
     __ISB();
     processRxQueue();
 }
