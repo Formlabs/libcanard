@@ -15,13 +15,13 @@
 #ifdef STM32F303xC
 #include <stm32f303xc.h>
 #define CANARD_RX0_IRQn USB_LP_CAN_RX0_IRQn
-#define CANARD_TX_IRQn CAN_TX_IRQn
+#define CANARD_TX_IRQn USB_HP_CAN_TX_IRQn
 #endif
 
 #ifdef STM32F303xE
 #include <stm32f303xe.h>
 #define CANARD_RX0_IRQn USB_LP_CAN_RX0_IRQn
-#define CANARD_TX_IRQn CAN_TX_IRQn
+#define CANARD_TX_IRQn USB_HP_CAN_TX_IRQn
 #endif
 
 #ifdef STM32F373xC
