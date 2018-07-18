@@ -183,48 +183,4 @@ int enqueueTxFrames(CanardInstance *ins,
     return result;
 }
 
-#if 0
-/**
- * Puts frame on on the TX queue. Higher priority placed first
- */
-void pushTxQueue(CanardInstance *ins, CanardTxQueueItem *item) {
-    NVIC_DisableIRQ(CAN_TX_IRQn);
-    CANARD_ASSERT(ins != NULL);
-    CANARD_ASSERT(item->frame.data_len > 0);       // UAVCAN doesn't allow zero-payload frames
-
-    if (ins->tx_queue == NULL) {
-        ins->tx_queue = item;
-        return;
-    }
-
-    CanardTxQueueItem *queue = ins->tx_queue;
-    CanardTxQueueItem *previous = ins->tx_queue;
-
-    while (queue != NULL) {
-        if (isPriorityHigher(queue->frame.id, item->frame.id)) // lower number wins
-        {
-            if (queue == ins->tx_queue) {
-                item->next = queue;
-                ins->tx_queue = item;
-            } else {
-                previous->next = item;
-                item->next = queue;
-            }
-            NVIC_EnableIRQ(CAN_TX_IRQn);
-            return;
-        } else {
-            if (queue->next == NULL) {
-                queue->next = item;
-                NVIC_EnableIRQ(CAN_TX_IRQn);
-                return;
-            } else {
-                previous = queue;
-                queue = queue->next;
-            }
-        }
-    }
-    NVIC_EnableIRQ(CAN_TX_IRQn);
-}
-#endif
-}
-
+} // extern "C"
