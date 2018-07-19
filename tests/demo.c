@@ -8,7 +8,7 @@
 # define _GNU_SOURCE
 #endif
 
-#include <canard.h>
+#include <libcanard/canard.h>
 #include <socketcan.h>      // CAN backend driver for SocketCAN, distributed with Libcanard
 
 #include <stdio.h>

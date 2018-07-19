@@ -32,7 +32,7 @@
 #ifndef CANARD_INTERNALS_H
 #define CANARD_INTERNALS_H
 
-#include "canard.h"
+#include <libcanard/canard.h>
 
 #ifdef __cplusplus
 extern "C" {

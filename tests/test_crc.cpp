@@ -23,7 +23,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "canard_internals.h"
+#include <libcanard/canard_internals.h>
 
 /*
  * CRC-16-CCITT

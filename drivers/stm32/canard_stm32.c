@@ -6,8 +6,8 @@
  * Author: Pavel Kirienko <pavel.kirienko@zubax.com>
  */
 
-#include "canard_stm32.h"
-#include "_internal_bxcan.h"
+#include <libcanard/drivers/stm32/canard_stm32.h>
+#include <libcanard/drivers/stm32/_internal_bxcan.h>
 #include <unistd.h>
 
 
