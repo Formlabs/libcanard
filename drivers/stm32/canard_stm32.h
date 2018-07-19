@@ -12,6 +12,10 @@
 #include <canard.h>
 #include <string.h>
 
+#ifdef STM32F303xC
+#include <stm32f303xc.h>
+#define CAN_IRQ USB_LP_CAN_RX0_IRQn
+#endif
 
 #ifdef STM32F303xE
 #include <stm32f303xe.h>
