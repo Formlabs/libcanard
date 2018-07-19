@@ -490,6 +490,16 @@ CanardPoolAllocatorStatistics canardGetPoolAllocatorStatistics(CanardInstance* i
 uint16_t canardConvertNativeFloatToFloat16(float value);
 float canardConvertFloat16ToNativeFloat(uint16_t value);
 
+typedef struct {
+    uint32_t tx_errors;
+    uint32_t rx_errors;
+    uint32_t broadcast_errors;
+} canard_errors_t;
+
+extern volatile canard_errors_t canard_errors;
+
+// Needs to be defined externally
+extern uint64_t getMonotonicTimestampMSec(void);
 
 #ifdef __cplusplus
 }
