@@ -24,6 +24,53 @@ static CanardSTM32Stats g_stats;
 
 static bool g_abort_tx_on_error = false;
 
+void CAN_RX0_IRQHandler(void) {
+    extern void CAN_IT_Callback();
+
+    if ((CAN->IER & CAN_IER_FMPIE0) && (CAN->RF0R & 0x3)) {
+        CAN_IT_Callback();
+
+    } else {
+        if ((CAN->ESR & CAN_ESR_LEC) && (CAN->IER & CAN_IER_LECIE) && (CAN->IER & CAN_IER_ERRIE)) {
+            /* TODO FE-5184 See if this is necessary */
+            /* Canard is supposed to handle error codes but we may have a leftover one at startup. */
+
+            CAN->ESR &= ~CAN_ESR_LEC;
+        }
+
+        CAN->MSR |= CAN_MSR_ERRI;
+    }
+}
+
+void CAN_TX_IRQHandler(void) {
+    extern void processTxQueue();
+
+    /* Check End of transmission flag */
+    if ((CAN->IER & CAN_IER_TMEIE) == CAN_IER_TMEIE)
+    {
+        /* Check Transmit request completion status */
+        if ((((CAN->TSR) & (CAN_TSR_RQCP0 | CAN_TSR_TXOK0 | CAN_TSR_TME0)) == (CAN_TSR_RQCP0 | CAN_TSR_TXOK0 | CAN_TSR_TME0))
+            || (((CAN->TSR) & (CAN_TSR_RQCP1 | CAN_TSR_TXOK1 | CAN_TSR_TME1)) == (CAN_TSR_RQCP1 | CAN_TSR_TXOK1 | CAN_TSR_TME1))
+            || (((CAN->TSR) & (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)) == (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)))
+        {
+            /* Check Transmit success */
+            if ((((CAN->TSR) & CAN_TSR_TXOK0) == CAN_TSR_TXOK0)
+                || (((CAN->TSR) & CAN_TSR_TXOK1) == CAN_TSR_TXOK1)
+                || (((CAN->TSR) & CAN_TSR_TXOK2) == CAN_TSR_TXOK2))
+            {
+                processTxQueue();
+            }
+            else /* Transmit failure */
+            {
+                /* Set CAN error code to TXFAIL error */
+                canard_errors.tx_errors++;
+            }
+
+            /* Clear transmission status flags (RQCPx and TXOKx) */
+            CAN->TSR |= CAN_TSR_RQCP0  | CAN_TSR_RQCP1  | CAN_TSR_RQCP2 | CAN_TSR_TXOK0 | CAN_TSR_TXOK1 | CAN_TSR_TXOK2;
+        }
+    }
+}
 
 static bool isFramePriorityHigher(uint32_t a, uint32_t b)
 {
@@ -233,6 +280,22 @@ int canardSTM32Init(const CanardSTM32CANTimings* const timings,
 
     BXCAN->MCR &= ~CANARD_STM32_CAN_MCR_INRQ;   // Leave init mode
 
+    /* Enable interrupts: */
+    /*  - Enable Error warning Interrupt */
+    /*  - Enable Error passive Interrupt */
+    /*  - Enable Bus-off Interrupt */
+    /*  - Enable Last error code Interrupt */
+    /*  - Enable Error Interrupt */
+    BXCAN->IER |= CANARD_STM32_CAN_IER_EWGIE
+                  | CANARD_STM32_CAN_IER_EPVIE
+                  | CANARD_STM32_CAN_IER_BOFIE
+                  | CANARD_STM32_CAN_IER_LECIE
+                  | CANARD_STM32_CAN_IER_ERRIE;
+    BXCAN->IER |= CANARD_STM32_CAN_IER_FMPIE0;
+
+    // Enable mailbox empty (TX callback) interrupt
+    BXCAN->IER |= CANARD_STM32_CAN_IER_TMEIE;
+
     if (!waitMSRINAKBitStateChange(BXCAN, false))
     {
         BXCAN->MCR = CANARD_STM32_CAN_MCR_RESET;
@@ -384,18 +447,6 @@ int canardSTM32Transmit(const CanardCANFrame* const frame)
 }
 
 void canardSTM32Receive_IT() {
-    /* Enable interrupts: */
-    /*  - Enable Error warning Interrupt */
-    /*  - Enable Error passive Interrupt */
-    /*  - Enable Bus-off Interrupt */
-    /*  - Enable Last error code Interrupt */
-    /*  - Enable Error Interrupt */
-    BXCAN->IER |= CANARD_STM32_CAN_IER_EWGIE
-                  | CANARD_STM32_CAN_IER_EPVIE
-                  | CANARD_STM32_CAN_IER_BOFIE
-                  | CANARD_STM32_CAN_IER_LECIE
-                  | CANARD_STM32_CAN_IER_ERRIE;
-    BXCAN->IER |= CANARD_STM32_CAN_IER_FMPIE0;
 }
 
 void canardSTM32ReleaseFIFO() {
@@ -426,11 +477,11 @@ void canardSTM32ReleaseFIFO() {
 }
 
 void canardSTM32EnablePeripheral() {
-    NVIC_EnableIRQ(CAN_IRQ);
+    NVIC_EnableIRQ(CANARD_RX0_IRQn);
 }
 
 void canardSTM32DisablePeripheral() {
-    NVIC_DisableIRQ(CAN_IRQ);
+    NVIC_DisableIRQ(CANARD_RX0_IRQn);
 }
 
 
