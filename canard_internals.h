@@ -32,7 +32,7 @@
 #ifndef CANARD_INTERNALS_H
 #define CANARD_INTERNALS_H
 
-#include "canard.h"
+#include <libcanard/canard.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -67,14 +67,6 @@ CANARD_INTERNAL CanardTransferType extractTransferType(uint32_t id);
 
 CANARD_INTERNAL uint16_t extractDataType(uint32_t id);
 
-CANARD_INTERNAL void pushTxQueue(CanardInstance* ins,
-                                 CanardTxQueueItem* item);
-
-CANARD_INTERNAL bool isPriorityHigher(uint32_t id,
-                                      uint32_t rhs);
-
-CANARD_INTERNAL CanardTxQueueItem* createTxItem(CanardPoolAllocator* allocator);
-
 CANARD_INTERNAL void prepareForNextTransfer(CanardRxState* state);
 
 CANARD_INTERNAL int computeTransferIDForwardDistance(uint8_t a,
@@ -86,12 +78,12 @@ CANARD_INTERNAL uint64_t releaseStatePayload(CanardInstance* ins,
                                              CanardRxState* rxstate);
 
 /// Returns the number of frames enqueued
-CANARD_INTERNAL int enqueueTxFrames(CanardInstance* ins,
-                                    uint32_t can_id,
-                                    uint8_t* transfer_id,
-                                    uint16_t crc,
-                                    const uint8_t* payload,
-                                    uint16_t payload_len);
+int enqueueTxFrames(CanardInstance* ins,
+                    uint32_t can_id,
+                    uint8_t* transfer_id,
+                    uint16_t crc,
+                    const uint8_t* payload,
+                    uint16_t payload_len);
 
 CANARD_INTERNAL void copyBitArray(const uint8_t* src,
                                   uint32_t src_offset,

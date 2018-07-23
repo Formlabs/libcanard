@@ -9,27 +9,31 @@
 #ifndef CANARD_STM32_H
 #define CANARD_STM32_H
 
-#include <canard.h>
+#include <libcanard/canard.h>
 #include <string.h>
 
 #ifdef STM32F303xC
 #include <stm32f303xc.h>
-#define CAN_IRQ USB_LP_CAN_RX0_IRQn
+#define CANARD_RX0_IRQn USB_LP_CAN_RX0_IRQn
+#define CANARD_TX_IRQn USB_HP_CAN_TX_IRQn
 #endif
 
 #ifdef STM32F303xE
 #include <stm32f303xe.h>
-#define CAN_IRQ USB_LP_CAN_RX0_IRQn
+#define CANARD_RX0_IRQn USB_LP_CAN_RX0_IRQn
+#define CANARD_TX_IRQn USB_HP_CAN_TX_IRQn
 #endif
 
 #ifdef STM32F373xC
 #include <stm32f373xc.h>
-#define CAN_IRQ CAN_RX0_IRQn
+#define CANARD_RX0_IRQn CAN_RX0_IRQn
+#define CANARD_TX_IRQn CAN_TX_IRQn
 #endif
 
 #ifdef STM32F0
 #include <stm32f0xx.h>
-#define CAN_IRQ CEC_CAN_IRQn
+#define CANARD_RX0_IRQn CEC_CAN_IRQn
+#define CANARD_TX_IRQn CEC_CAN_IRQn
 #endif
 
 

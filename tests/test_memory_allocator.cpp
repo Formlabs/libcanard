@@ -23,7 +23,7 @@
  */
 
 #include <gtest/gtest.h>
-#include "canard_internals.h"
+#include <libcanard/canard_internals.h>
 
 
 #define AVAILABLE_BLOCKS 3

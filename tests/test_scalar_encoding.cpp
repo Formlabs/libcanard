@@ -27,7 +27,7 @@
 #include <stdexcept>
 #include <memory>
 #include <gtest/gtest.h>
-#include "canard_internals.h"
+#include <libcanard/canard_internals.h>
 
 
 TEST(BigEndian, Check)

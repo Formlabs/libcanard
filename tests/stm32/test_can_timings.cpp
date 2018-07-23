@@ -23,7 +23,7 @@
  */
 
 #include <gtest/gtest.h>
-#include <drivers/stm32/canard_stm32.h>
+#include <libcanard/drivers/stm32/canard_stm32.h>
 #include <cstdio>
 #include <string>
 #include <stdexcept>

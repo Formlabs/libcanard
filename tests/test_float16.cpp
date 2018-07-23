@@ -24,7 +24,7 @@
 
 #include <gtest/gtest.h>
 #include <math.h>
-#include "canard.h"
+#include <libcanard/canard.h>
 
 
 TEST(Float16, FromNative)
