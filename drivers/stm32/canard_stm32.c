@@ -54,13 +54,9 @@ void CAN_TX_IRQHandler(void) {
             || (((CAN->TSR) & (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)) == (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)))
         {
             /* Check Transmit success */
-            if ((((CAN->TSR) & CAN_TSR_TXOK0) == CAN_TSR_TXOK0)
-                || (((CAN->TSR) & CAN_TSR_TXOK1) == CAN_TSR_TXOK1)
-                || (((CAN->TSR) & CAN_TSR_TXOK2) == CAN_TSR_TXOK2))
-            {
-                processTxQueue();
-            }
-            else /* Transmit failure */
+            if ((((CAN->TSR) & CAN_TSR_TXOK0) != CAN_TSR_TXOK0)
+                && (((CAN->TSR) & CAN_TSR_TXOK1) != CAN_TSR_TXOK1)
+                && (((CAN->TSR) & CAN_TSR_TXOK2) != CAN_TSR_TXOK2))  /* Transmit failure */
             {
                 /* Set CAN error code to TXFAIL error */
                 canard_errors.tx_errors++;
@@ -68,6 +64,8 @@ void CAN_TX_IRQHandler(void) {
 
             /* Clear transmission status flags (RQCPx and TXOKx) */
             CAN->TSR |= CAN_TSR_RQCP0  | CAN_TSR_RQCP1  | CAN_TSR_RQCP2 | CAN_TSR_TXOK0 | CAN_TSR_TXOK1 | CAN_TSR_TXOK2;
+
+            processTxQueue();
         }
     }
 }
