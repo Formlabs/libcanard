@@ -43,6 +43,10 @@ public:
         }
     }
 
+    inline msize_t free() const {
+        return _SIZE - size();
+    }
+
     inline void advance_write() {
         writeIdx = inc(writeIdx);
     }

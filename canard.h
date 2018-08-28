@@ -490,6 +490,11 @@ CanardPoolAllocatorStatistics canardGetPoolAllocatorStatistics(CanardInstance* i
 uint16_t canardConvertNativeFloatToFloat16(float value);
 float canardConvertFloat16ToNativeFloat(uint16_t value);
 
+int canardGetRXSize();
+int canardGetTXSize();
+int canardGetRXFree();
+int canardGetTXFree();
+
 typedef struct {
     uint32_t tx_errors;
     uint32_t rx_errors;
