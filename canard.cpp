@@ -7,14 +7,24 @@
 static RingBuffer<CanardCANFrame, CAN_RX_RB_SIZE> CAN_RX_RB;
 static RingBuffer<CanardCANFrame, CAN_TX_RB_SIZE> CAN_TX_RB;
 
-int getRXSize() {
+extern "C" {
+int canardGetRXSize() {
     return CAN_RX_RB.size();
 }
 
-int getTXSize() {
+int canardGetTXSize() {
     return CAN_TX_RB.size();
 }
 
+int canardGetRXFree() {
+    return CAN_RX_RB.free();
+}
+
+int canardGetTXFree() {
+    return CAN_TX_RB.free();
+}
+
+}
 
 extern "C" {
 extern CanardInstance canard;
@@ -34,7 +44,7 @@ void USED CAN_IT_Callback() {
         canard_errors.rx_errors++;
     }
 
-    volatile int rxSize = getRXSize();
+    volatile int rxSize = canardGetRXSize();
     if (rxSize > maxRxSize) {
         maxRxSize = rxSize;
     }
@@ -79,7 +89,7 @@ void processTxQueue(void) {
             CAN_TX_RB.advance_read();
         }
 
-        volatile int txSize = getTXSize();
+        volatile int txSize = canardGetTXSize();
         if (txSize > maxTxSize) {
             maxTxSize = txSize;
         }
