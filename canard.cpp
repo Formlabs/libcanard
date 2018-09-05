@@ -51,7 +51,6 @@ void USED CAN_IT_Callback() {
     if (rxSize > allTimeMaxRxSize) {
         allTimeMaxRxSize = rxSize;
     }
-    canardSTM32Receive_IT();
 }
 #endif
 
