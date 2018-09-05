@@ -444,9 +444,6 @@ int canardSTM32Transmit(const CanardCANFrame* const frame)
     return 1;
 }
 
-void canardSTM32Receive_IT() {
-}
-
 void canardSTM32ReleaseFIFO() {
     static volatile uint32_t* const RFxR[2] =
         {
