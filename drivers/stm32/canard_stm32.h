@@ -30,6 +30,12 @@
 #define CANARD_TX_IRQn CAN_TX_IRQn
 #endif
 
+#ifdef STM32F745xx
+#include <stm32f745xx.h>
+#define CANARD_RX0_IRQn CAN1_RX0_IRQn
+#define CANARD_TX_IRQn CAN1_TX_IRQn
+#endif
+
 #ifdef STM32F0
 #include <stm32f0xx.h>
 #define CANARD_RX0_IRQn CEC_CAN_IRQn

@@ -27,18 +27,18 @@ static bool g_abort_tx_on_error = false;
 void CAN_RX0_IRQHandler(void) {
     extern void CAN_IT_Callback();
 
-    if ((CAN->IER & CAN_IER_FMPIE0) && (CAN->RF0R & 0x3)) {
+    if ((BXCAN->IER & CAN_IER_FMPIE0) && (BXCAN->RF0R & 0x3)) {
         CAN_IT_Callback();
 
     } else {
-        if ((CAN->ESR & CAN_ESR_LEC) && (CAN->IER & CAN_IER_LECIE) && (CAN->IER & CAN_IER_ERRIE)) {
+        if ((BXCAN->ESR & CAN_ESR_LEC) && (BXCAN->IER & CAN_IER_LECIE) && (BXCAN->IER & CAN_IER_ERRIE)) {
             /* TODO FE-5184 See if this is necessary */
             /* Canard is supposed to handle error codes but we may have a leftover one at startup. */
 
-            CAN->ESR &= ~CAN_ESR_LEC;
+            BXCAN->ESR &= ~CAN_ESR_LEC;
         }
 
-        CAN->MSR |= CAN_MSR_ERRI;
+        BXCAN->MSR |= CAN_MSR_ERRI;
     }
 }
 
@@ -46,24 +46,24 @@ void CAN_TX_IRQHandler(void) {
     extern void processTxQueue();
 
     /* Check End of transmission flag */
-    if ((CAN->IER & CAN_IER_TMEIE) == CAN_IER_TMEIE)
+    if ((BXCAN->IER & CAN_IER_TMEIE) == CAN_IER_TMEIE)
     {
         /* Check Transmit request completion status */
-        if ((((CAN->TSR) & (CAN_TSR_RQCP0 | CAN_TSR_TXOK0 | CAN_TSR_TME0)) == (CAN_TSR_RQCP0 | CAN_TSR_TXOK0 | CAN_TSR_TME0))
-            || (((CAN->TSR) & (CAN_TSR_RQCP1 | CAN_TSR_TXOK1 | CAN_TSR_TME1)) == (CAN_TSR_RQCP1 | CAN_TSR_TXOK1 | CAN_TSR_TME1))
-            || (((CAN->TSR) & (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)) == (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)))
+        if ((((BXCAN->TSR) & (CAN_TSR_RQCP0 | CAN_TSR_TXOK0 | CAN_TSR_TME0)) == (CAN_TSR_RQCP0 | CAN_TSR_TXOK0 | CAN_TSR_TME0))
+            || (((BXCAN->TSR) & (CAN_TSR_RQCP1 | CAN_TSR_TXOK1 | CAN_TSR_TME1)) == (CAN_TSR_RQCP1 | CAN_TSR_TXOK1 | CAN_TSR_TME1))
+            || (((BXCAN->TSR) & (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)) == (CAN_TSR_RQCP2 | CAN_TSR_TXOK2 | CAN_TSR_TME2)))
         {
             /* Check Transmit success */
-            if ((((CAN->TSR) & CAN_TSR_TXOK0) != CAN_TSR_TXOK0)
-                && (((CAN->TSR) & CAN_TSR_TXOK1) != CAN_TSR_TXOK1)
-                && (((CAN->TSR) & CAN_TSR_TXOK2) != CAN_TSR_TXOK2))  /* Transmit failure */
+            if ((((BXCAN->TSR) & CAN_TSR_TXOK0) != CAN_TSR_TXOK0)
+                && (((BXCAN->TSR) & CAN_TSR_TXOK1) != CAN_TSR_TXOK1)
+                && (((BXCAN->TSR) & CAN_TSR_TXOK2) != CAN_TSR_TXOK2))  /* Transmit failure */
             {
                 /* Set CAN error code to TXFAIL error */
                 canard_errors.tx_errors++;
             }
 
             /* Clear transmission status flags (RQCPx and TXOKx) */
-            CAN->TSR |= CAN_TSR_RQCP0  | CAN_TSR_RQCP1  | CAN_TSR_RQCP2 | CAN_TSR_TXOK0 | CAN_TSR_TXOK1 | CAN_TSR_TXOK2;
+            BXCAN->TSR |= CAN_TSR_RQCP0  | CAN_TSR_RQCP1  | CAN_TSR_RQCP2 | CAN_TSR_TXOK0 | CAN_TSR_TXOK1 | CAN_TSR_TXOK2;
 
             processTxQueue();
         }
