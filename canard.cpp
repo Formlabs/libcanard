@@ -34,7 +34,7 @@ volatile int allTimeMaxTxSize;
 volatile int maxRxSize;
 volatile int maxTxSize;
 
-#if defined(STM32F0) || defined(STM32F3)
+#if defined(STM32F0) || defined(STM32F3) || defined(STM32F7)
 void USED CAN_IT_Callback() {
     if (!CAN_RX_RB.is_full()) {
         canardSTM32Receive(&CAN_RX_RB.get_next_write_entry());
